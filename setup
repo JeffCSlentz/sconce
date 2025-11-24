@@ -6,6 +6,9 @@ CONTAINER_FILE="${SERVICE_NAME}.container"
 SYSTEMD_USER_DIR="${HOME}/.config/containers/systemd"
 SYSTEMD_PATH="${SYSTEMD_USER_DIR}/${CONTAINER_FILE}"
 
+# Current working directory
+CWD=$(pwd)
+
 echo "Starting deployment of $SERVICE_NAME..."
 
 # Check if container file exists
@@ -16,7 +19,7 @@ fi
 
 # Ask if user has edited the container file
 echo ""
-read -p "Have you edited the sconce.container file yet? (y/n): " -n 1 -r
+read -p "Have you edited the sconce.container file yet? Make sure to change volume paths to this location! (y/n): " -n 1 -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
    echo "Please edit $CONTAINER_FILE before running setup."
@@ -26,6 +29,19 @@ fi
 # Create systemd user directory if it doesn't exist
 echo "Creating systemd user directory: $SYSTEMD_USER_DIR"
 mkdir -p "$SYSTEMD_USER_DIR"
+
+# Create torch-server directory in cwd
+echo "Creating torch-server directory at: $CWD/torch-server"
+mkdir -p "$CWD/torch-server"
+
+# Make entrypoint executable
+ENTRYPOINT="$CWD/scripts/entrypoint.sh"
+if [ -f "$ENTRYPOINT" ]; then
+    echo "Setting executable permission on: $ENTRYPOINT"
+    chmod +x "$ENTRYPOINT"
+else
+    echo "Warning: $ENTRYPOINT not found!"
+fi
 
 # Copy the .container file to the systemd user directory
 echo "Copying $CONTAINER_FILE to $SYSTEMD_PATH"

@@ -11,7 +11,7 @@ UserNS=keep-id
 
 # Host data directory → container
 Volume=%h/sconce/torch-server:/app/torch-server
-Volume=%h/sconce/entrypoint.sh:/app/entrypoint.sh:Z
+Volume=%h/sconce/scripts/entrypoint.sh:/app/entrypoint.sh:Z
 
 # Networking
 PublishPort=27016:27016/udp
@@ -34,10 +34,16 @@ Environment=WINEPARAMS=
 # Logging
 LogDriver=journald
 
-[Service]
-ExecStartPre=mkdir -p %h/sconce/torch-server
-ExecStartPre=chmod +x %h/sconce/entrypoint.sh
+#[Service]
+#ExecStartPre=mkdir -p %h/sconce/torch-server
+#ExecStartPre=chmod +x %h/sconce/entrypoint.sh
+#ExecStart=/app/entrypoint.sh
+
+
+# Entrypoint
 ExecStart=/app/entrypoint.sh
+Restart=always
+TimeoutStartSec=0
 Restart=always
 TimeoutStartSec=0
 
