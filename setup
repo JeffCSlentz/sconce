@@ -37,5 +37,5 @@ systemctl --user daemon-reload
 
 echo ""
 echo "Deployment complete!"
-echo "Start the service with: systemctl --user start ${SERVICE_NAME}.service"
+echo "Start the service with: systemctl --user start ${SERVICE_NAME}.service or ./start"
 echo "Check status with: systemctl --user status ${SERVICE_NAME}.service"

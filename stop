@@ -1,8 +1,8 @@
 #!/bin/bash
-# Check if running as root
-if [ "$(id -u)" != "0" ]; then
-   echo "This script must be run as root (use sudo)."
-   exit 1
-fi
+# start_sconce.sh: Start the sconce system service and follow logs.
 
-systemctl stop sconce.service
+SERVICE_NAME="sconce"
+
+echo "Stopping ${SERVICE_NAME}.service..."
+systemctl stop --user "${SERVICE_NAME}.service"
+echo "${SERVICE_NAME}.service stopped."

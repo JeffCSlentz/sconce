@@ -4,7 +4,7 @@
 SERVICE_NAME="sconce"
 
 echo "Starting ${SERVICE_NAME}.service..."
-systemctl start --user "${SERVICE_NAME}.service"
+systemctl start --user --no-block "${SERVICE_NAME}.service"
 
 echo "Attempting to follow logs (Ctrl+C to stop following, service keeps running):"
 
