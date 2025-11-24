@@ -8,8 +8,7 @@ Image=ghcr.io/geraveoyomama/sconce:latest
 ContainerName=sconce
 AutoUpdate=registry
 
-#UserNS=keep-id
-Volume=%h/%N/torch-server:/app/torch-server
+Volume=/srv/sconce/torch-server:/app/torch-server
 
 PublishPort=27016:27016/udp
 PublishPort=5009:5900
@@ -31,7 +30,7 @@ LogDriver=journald
 
 
 [Service]
-ExecStartPre=mkdir -p %h/%N/torch-server
+ExecStartPre=mkdir -p /srv/sconce/torch-server
 
 # Inform systemd of additional exit status
 #SuccessExitStatus=0 143

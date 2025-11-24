@@ -1,0 +1,33 @@
+#!/bin/bash
+# setup_sconce.sh: Deploy the sconce container as a system service.
+
+SERVICE_NAME="sconce"
+CONTAINER_FILE="${SERVICE_NAME}.container"
+SYSTEMD_PATH="/etc/systemd/system/${CONTAINER_FILE}"
+VOLUME_PATH="/srv/${SERVICE_NAME}/torch-server"
+
+echo "Starting deployment of $SERVICE_NAME..."
+
+# Check if running as root
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root (use sudo)."
+   exit 1
+fi
+
+# 1. Create necessary volume directory
+echo "Creating volume directory: $VOLUME_PATH"
+mkdir -p "$VOLUME_PATH"
+
+# 2. Copy the .container file to the systemd directory
+echo "Copying $CONTAINER_FILE to $SYSTEMD_PATH"
+cp "$CONTAINER_FILE" "$SYSTEMD_PATH"
+
+# 3. Reload systemd to detect the new service file
+echo "Reloading systemd daemon..."
+systemctl daemon-reload
+
+# 4. Enable and start the service
+echo "Enabling $SERVICE_NAME service..."
+systemctl enable "${SERVICE_NAME}.service"
+
+echo "Deployment complete. Start with /start and check status with: sudo systemctl status ${SERVICE_NAME}.service"

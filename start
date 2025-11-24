@@ -1,2 +1,18 @@
 #!/bin/bash
-podman-compose up -d
+# start_sconce.sh: Start the sconce system service and follow logs.
+
+SERVICE_NAME="sconce"
+
+# Check if running as root
+if [ "$(id -u)" != "0" ]; then
+   echo "This script must be run as root (use sudo)."
+   exit 1
+fi
+
+echo "Starting ${SERVICE_NAME}.service..."
+systemctl start "${SERVICE_NAME}.service"
+
+echo "Attempting to follow logs (Ctrl+C to stop following, service keeps running):"
+
+# Use journalctl to follow the logs for the specific service unit
+journalctl -f -u "${SERVICE_NAME}.service"
