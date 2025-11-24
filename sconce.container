@@ -7,8 +7,10 @@ After=network-online.target
 Image=ghcr.io/geraveoyomama/sconce:latest
 ContainerName=sconce
 AutoUpdate=registry
+UserNS=keep-id
 
-Volume=/srv/sconce/torch-server:/app/torch-server
+Environment=SCONCE_DIR=%h/sconce/torch-server
+Volume=${SCONCE_DIR}:/app/torch-server
 
 PublishPort=27016:27016/udp
 PublishPort=5009:5900
@@ -28,13 +30,8 @@ Environment=WINEPARAMS=
 
 LogDriver=journald
 
-
 [Service]
-ExecStartPre=mkdir -p /srv/sconce/torch-server
-
-# Inform systemd of additional exit status
-#SuccessExitStatus=0 143
-#Restart=on-abnormal
+ExecStartPre=mkdir -p ${SCONCE_DIR}
 Restart=always
 
 [Install]
