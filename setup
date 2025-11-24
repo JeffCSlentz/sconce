@@ -3,7 +3,7 @@
 
 SERVICE_NAME="sconce"
 CONTAINER_FILE="${SERVICE_NAME}.container"
-SYSTEMD_USER_DIR="${HOME}/.config/systemd/user"
+SYSTEMD_USER_DIR="${HOME}/.config/systemd"
 SYSTEMD_PATH="${SYSTEMD_USER_DIR}/${CONTAINER_FILE}"
 
 echo "Starting deployment of $SERVICE_NAME..."
