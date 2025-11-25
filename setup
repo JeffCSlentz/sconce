@@ -1,11 +1,9 @@
 #!/bin/bash
-# setup_sconce.sh: Deploy the sconce container as a system service.
+# setup: Deploy the sconce container as a system service.
 
 SERVICE_NAME="sconce"
 CONTAINER_FILE="${SERVICE_NAME}.container"
 ROOTFUL_SYSTEMD_DIR=/usr/share/containers/systemd
-#SYSTEMD_USER_DIR="${HOME}/.config/containers/systemd"
-#SYSTEMD_PATH="${SYSTEMD_USER_DIR}/${CONTAINER_FILE}"
 
 # Current working directory
 CWD=$(pwd)
