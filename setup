@@ -3,8 +3,9 @@
 
 SERVICE_NAME="sconce"
 CONTAINER_FILE="${SERVICE_NAME}.container"
-SYSTEMD_USER_DIR="${HOME}/.config/containers/systemd"
-SYSTEMD_PATH="${SYSTEMD_USER_DIR}/${CONTAINER_FILE}"
+ROOTFUL_SYSTEMD_DIR=/usr/share/containers/systemd
+#SYSTEMD_USER_DIR="${HOME}/.config/containers/systemd"
+#SYSTEMD_PATH="${SYSTEMD_USER_DIR}/${CONTAINER_FILE}"
 
 # Current working directory
 CWD=$(pwd)
@@ -17,41 +18,32 @@ if [ ! -f "$CONTAINER_FILE" ]; then
    exit 1
 fi
 
+# Create systemd user directory if it doesn't exist
+echo "Creating rootful systemd directory: $ROOTFUL_SYSTEMD_DIR"
+mkdir -p "$ROOTFUL_SYSTEMD_DIR"
+
+# Create torch-server directory in cwd
+echo "Creating torch-server directory at: $CWD/torch-server"
+mkdir -p "$CWD/torch-server"
+
 # Ask if user has edited the container file
 echo ""
-read -p "Have you edited the sconce.container file yet? Make sure to change volume paths to this location! (y/n): " -n 1 -r
+read -p "Have you edited the sconce.container file to have `Volume=$CWD/torch-server:/app/torch-server`? (y/n): " -n 1 -r
 echo ""
 if [[ ! $REPLY =~ ^[Yy]$ ]]; then
    echo "Please edit $CONTAINER_FILE before running setup."
    exit 1
 fi
 
-# Create systemd user directory if it doesn't exist
-echo "Creating systemd user directory: $SYSTEMD_USER_DIR"
-mkdir -p "$SYSTEMD_USER_DIR"
-
-# Create torch-server directory in cwd
-echo "Creating torch-server directory at: $CWD/torch-server"
-mkdir -p "$CWD/torch-server"
-
-# Make entrypoint executable
-ENTRYPOINT="$CWD/scripts/entrypoint.sh"
-if [ -f "$ENTRYPOINT" ]; then
-    echo "Setting executable permission on: $ENTRYPOINT"
-    chmod +x "$ENTRYPOINT"
-else
-    echo "Warning: $ENTRYPOINT not found!"
-fi
-
 # Copy the .container file to the systemd user directory
-echo "Copying $CONTAINER_FILE to $SYSTEMD_PATH"
-cp "$CONTAINER_FILE" "$SYSTEMD_PATH"
+echo "Copying $CONTAINER_FILE to $ROOTFUL_SYSTEMD_DIR"
+cp "$CONTAINER_FILE" "$ROOTFUL_SYSTEMD_DIR"
 
 # Reload systemd user daemon to detect the new service file
 echo "Reloading systemd user daemon..."
-systemctl --user daemon-reload
+systemctl daemon-reload
 
 echo ""
 echo "Deployment complete!"
-echo "Start the service with: systemctl --user start ${SERVICE_NAME}.service or ./start"
-echo "Check status with: systemctl --user status ${SERVICE_NAME}.service"
+echo "Start the service with: `systemctl start ${SERVICE_NAME}.service` or ./start"
+echo "Check status with: `systemctl status ${SERVICE_NAME}.service`"

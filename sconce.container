@@ -7,11 +7,9 @@ After=network-online.target
 Image=ghcr.io/geraveoyomama/sconce:latest
 ContainerName=sconce
 AutoUpdate=registry
-UserNS=keep-id
 
-# Host data directory → container
+# Host data directory → container. Point this to your current directory if you'd like. %h = /home/YOUR_USER_NAME/
 Volume=%h/sconce/torch-server:/app/torch-server
-Volume=%h/sconce/scripts/entrypoint.sh:/app/entrypoint.sh:Z
 
 # Networking
 PublishPort=27016:27016/udp
@@ -39,11 +37,6 @@ LogDriver=journald
 #ExecStartPre=chmod +x %h/sconce/entrypoint.sh
 #ExecStart=/app/entrypoint.sh
 
-
-# Entrypoint
-ExecStart=/app/entrypoint.sh
-Restart=always
-TimeoutStartSec=0
 Restart=always
 TimeoutStartSec=0
 

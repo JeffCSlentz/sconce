@@ -4,5 +4,5 @@
 SERVICE_NAME="sconce"
 
 echo "Stopping ${SERVICE_NAME}.service..."
-systemctl stop --user "${SERVICE_NAME}.service"
+systemctl stop "${SERVICE_NAME}.service"
 echo "${SERVICE_NAME}.service stopped."
