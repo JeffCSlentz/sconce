@@ -1,6 +1,13 @@
 #!/bin/bash
 # start_sconce.sh: Start the sconce system service and follow logs.
 
+# Check if running with sudo/root privileges
+if [ "$EUID" -ne 0 ]; then
+   echo "Error: This script requires sudo privileges to stop the service."
+   echo "Please run with: sudo $0"
+   exit 1
+fi
+
 SERVICE_NAME="sconce"
 
 echo "Stopping ${SERVICE_NAME}.service..."
