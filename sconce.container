@@ -32,11 +32,7 @@ Environment=WINEPARAMS=
 # Logging
 LogDriver=journald
 
-#[Service]
-#ExecStartPre=mkdir -p %h/sconce/torch-server
-#ExecStartPre=chmod +x %h/sconce/entrypoint.sh
-#ExecStart=/app/entrypoint.sh
-
+[Service]
 Restart=always
 TimeoutStartSec=0
 
