@@ -1,5 +1,5 @@
 #!/bin/bash
-# setup_sconce.sh: Deploy the sconce container as a user service.
+# setup_sconce.sh: Deploy the sconce container as a system service.
 
 SERVICE_NAME="sconce"
 CONTAINER_FILE="${SERVICE_NAME}.container"
@@ -9,6 +9,13 @@ ROOTFUL_SYSTEMD_DIR=/usr/share/containers/systemd
 
 # Current working directory
 CWD=$(pwd)
+
+# Check if running with sudo/root privileges
+if [ "$EUID" -ne 0 ]; then
+   echo "Error: This script requires sudo privileges to write to $ROOTFUL_SYSTEMD_DIR"
+   echo "Please run with: sudo $0"
+   exit 1
+fi
 
 echo "Starting deployment of $SERVICE_NAME..."
 
